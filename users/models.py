@@ -18,7 +18,7 @@ class Teacher(models.Model):
     ('bot', 'Botany'),
 )
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE,related_name='teacher')
     teacher_name = models.CharField(max_length=255,null=True,blank=True)
     qualifications = models.CharField(max_length=255)
     expertise = MultiSelectField(choices=EXPERTISE_CHOICES, max_length=255)

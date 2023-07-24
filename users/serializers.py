@@ -18,20 +18,25 @@ class UserSerializer(serializers.ModelSerializer):
     
 
 class TeacherSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    # user = UserSerializer()
+    expertise = serializers.ListField()
+
 
     class Meta:
         model = Teacher
-        fields = ['user', 'qualifications', 'expertise']
+        fields = ['user', 'qualifications', 'expertise','teacher_name']
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')
-        user = UserSerializer().create(user_data)
-        teacher = Teacher.objects.create(user=user, **validated_data)
+        print(user_data)
+        # user = UserSerializer().create(user_data)
+        teacher = Teacher.objects.create(user=user_data, **validated_data)
         return teacher
     
 class StudentSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    # user = UserSerializer()
+    # specialization = serializers.ListField()
+    
 
     class Meta:
         model = Student
@@ -39,6 +44,6 @@ class StudentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')
-        user = UserSerializer().create(user_data)
-        student = Student.objects.create(user=user, **validated_data)
+        # user = UserSerializer().create(user_data)
+        student = Student.objects.create(user=user_data, **validated_data)
         return student

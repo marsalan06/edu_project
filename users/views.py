@@ -12,9 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from rest_framework import viewsets
 from .models import Teacher, Student
-
-
-
+from django.contrib.auth.models import User
 
 
 class UserRegistrationView(APIView):
@@ -50,6 +48,75 @@ class TeacherViewSet(viewsets.ModelViewSet):
     queryset = Teacher.objects.all()
     serializer_class = TeacherSerializer
 
+    def create(self, request, *args, **kwargs):
+        # Check if the user already exists
+        username = request.data.get('user')['username']
+        print("=========12121=====")
+        print(username)
+        try:
+            print("======try=====")
+            user = User.objects.get(username=username)
+            print(user)
+            if Teacher.objects.filter(user=user.id).exists():
+                print("====teacher exists====")
+                return Response({"message": "User already has a teacher record."}, status=status.HTTP_400_BAD_REQUEST)
+        except User.DoesNotExist:
+            print("=====user doesnt exists=====")
+            # Create the user
+            user_serializer = UserSerializer(data=request.data.get('user'))
+            if user_serializer.is_valid():
+                user = user_serializer.save()
+            else:
+                return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if the teacher record already exists
+        # Create the teacher
+        print("=========teacher level=======")
+        request.data['user'] = user.id
+        print(request.data)
+        teacher_serializer = TeacherSerializer(data=request.data)
+        if teacher_serializer.is_valid():
+            teacher_serializer.save(user=user)
+        else:
+            return Response(teacher_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(teacher_serializer.data, status=status.HTTP_201_CREATED)
+
+
 class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+
+    def create(self, request, *args, **kwargs):
+        # Check if the user already exists
+        username = request.data.get('user')['username']
+        print("=========12121=====")
+        print(username)
+        try:
+            print("======try=====")
+            user = User.objects.get(username=username)
+            print(user)
+            if Student.objects.filter(user=user.id).exists():
+                print("====student exists====")
+                return Response({"message": "User already has a student record."}, status=status.HTTP_400_BAD_REQUEST)
+        except User.DoesNotExist:
+            print("=====user doesnt exists=====")
+            # Create the user
+            user_serializer = UserSerializer(data=request.data.get('user'))
+            if user_serializer.is_valid():
+                user = user_serializer.save()
+            else:
+                return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if the student record already exists
+        # Create the student
+        print("=========student level=======")
+        request.data['user'] = user.id
+        print(request.data)
+        student_serializer = StudentSerializer(data=request.data)
+        if student_serializer.is_valid():
+            student_serializer.save(user=user)
+        else:
+            return Response(student_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(student_serializer.data, status=status.HTTP_201_CREATED)
