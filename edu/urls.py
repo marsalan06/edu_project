@@ -20,5 +20,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/',include('users.urls')),
-    path('session/',include('class_sessions.urls'))
+    path('session/',include('class_sessions.urls')),
+    path('call/',include('zoom_integration.urls'))
 ]
