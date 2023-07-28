@@ -10,6 +10,7 @@ from .models import TeachingSession
 from .serializers import TeachingSessionSerializer
 
 def get_expertise_choices(request):
+    print("=============testing here====")
     teacher_id = request.GET.get('teacher_id')
     if teacher_id:
         teacher = Teacher.objects.filter(id=teacher_id).first()

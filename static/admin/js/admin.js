@@ -45,6 +45,6 @@ $(document).ready(function() {
     });
   
     // Initialize expertise choices on page load
-    updateExpertiseChoices();
+    //updateExpertiseChoices();
   });
   

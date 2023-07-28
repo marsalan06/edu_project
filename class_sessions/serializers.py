@@ -12,7 +12,8 @@ class TeachingSessionSerializer(serializers.ModelSerializer):
     teacher = serializers.PrimaryKeyRelatedField(queryset=Teacher.objects.all())
     student = serializers.PrimaryKeyRelatedField(queryset=Student.objects.all())
     # expertise = serializers.ChoiceField(choices=[])
-    expertise = serializers.ListField()
+    # expertise = serializers.ListField(child=serializers.CharField())
+    expertise = serializers.CharField()
 
     class Meta:
         model = TeachingSession
@@ -29,7 +30,7 @@ class TeachingSessionSerializer(serializers.ModelSerializer):
             print(list_expertise[0]['expertise'])
             if experity not in list(list_expertise[0]['expertise']):
                 print("====if case====")
-                validated_data['expertise'] = ['']
+                validated_data['expertise'] = []
                 print(validated_data)
                 # teacher_session_object = TeachingSession.objects.create(**validated_data)
                 teacher_session_object = TeachingSession.objects.create(**validated_data)
