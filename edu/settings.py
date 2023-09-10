@@ -12,7 +12,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
+
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -42,18 +45,30 @@ INSTALLED_APPS = [
     'users',
     'payments',
     'zoom_integration',
-    'class_sessions'
+    'class_sessions',
+    'oauth2_provider',
+    'corsheaders',
 ]
+
+
+OAUTH2_PROVIDER = {
+    'SCOPES': {'read', 'write'},
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# CORS_ALLOWED_ORIGINS = [
+#     'https://49a9-203-81-218-176.ngrok-free.app'
+# ]
 
 ROOT_URLCONF = 'edu.urls'
 
@@ -140,3 +155,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CSRF_TRUSTED_ORIGINS = ['https://49a9-203-81-218-176.ngrok-free.app']
+CLIENT_ID = os.getenv('zoom_api_key')
+CLIENT_SECRET = os.getenv('zoom_api_secret')
+REDIRECT_URI = 'https://49a9-203-81-218-176.ngrok-free.app'
