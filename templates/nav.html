@@ -1,0 +1,18 @@
+{% load static %}
+<nav class="navbar border-bottom border-body" style="background-color: black; height: 58px;">
+    <div class="container">
+        <div>
+            <a href="{% url 'index' %}" style="text-decoration: none;">
+                <span style="font-size: 28px;font-weight: 900;color: white;">G</span><span style="font-size: 24px; color: white;">UIDELANCE</span>
+            </a>
+        </div>
+        <div>
+            <a href="{% url 'user-registration' %}" style="text-decoration: none;">
+            <button type="button" class="btn btn-dark headerBtn">Sign up</button>
+            </a>
+            <a href="{% url 'user-login' %}" style="text-decoration: none;">
+            <button type="button" class="btn btn-dark headerBtn" style="margin-left: 2px;">Log in</button>
+            </a>
+        </div>
+    </div>
+</nav>

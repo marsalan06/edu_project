@@ -14,6 +14,8 @@ from rest_framework import viewsets
 from .models import Teacher, Student
 from django.contrib.auth.models import User
 
+def index(request):
+    return render(request,'index.html')
 
 class UserRegistrationView(APIView):
     @csrf_exempt if settings.DEBUG else None
@@ -23,6 +25,10 @@ class UserRegistrationView(APIView):
             user = serializer.save()
             return Response({'message': 'User registered successfully.'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def get(self,request):
+        context = {}
+        return render(request, 'Signup.html',context)
 
 class UserLoginView(APIView):
     @csrf_exempt if settings.DEBUG else None
@@ -37,6 +43,10 @@ class UserLoginView(APIView):
             # Generate and return a token or session ID for subsequent requests
             return Response({'message': 'Login successful.'}, status=status.HTTP_200_OK)
         return Response({'message': 'Invalid username or password.'}, status=status.HTTP_401_UNAUTHORIZED)
+    
+    def get(self,request):
+        context = {}
+        return render(request, 'Login.html',context)
 
 
 class GetCSRF(View):

@@ -1,3 +1,7 @@
 class_sessions/__pycache__/
 zoom_integration/__pycache__/
-class_sessions/__pycache__/
+class_sessions/__pycache__/*
+static
+class_sessions/migrations/__pycache__/
+users/migrations/__pycache__/
+zoom_integration/migrations/__pycache__/

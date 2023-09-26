@@ -1,0 +1,206 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GUIDELANCE</title>
+    
+    <!-- Link to an external CSS file -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="Fonts/chalkboy/Chalkboy Free Trial.woff" type="font/woff" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@800&display=swap" rel="stylesheet">
+<!-- <link rel="stylesheet" href="css/styles.css"> -->
+    
+    <!-- Inline CSS styles (optional) -->
+    <style>
+        @font-face {
+            font-family: 'Chalk';
+            src: url('Fonts/chalkboy/Chalkboy.otf')
+            format('woff');
+        }
+        body{
+            background-color: white;
+                        /* Use linear-gradient with angle and color stops */
+                        /* background: linear-gradient(35deg, #00cc66, #007733, #1b5e20); */
+            /* Set a fixed background size for full coverage */
+            /* background-size: cover; */
+            /* Apply background to the entire viewport */
+            /* height: 100vh;
+            margin: 0; */
+        }
+        .backgroundGridOne{
+            /* background-color: #81c784; */
+            width: 100%;
+            color: white;
+        }
+
+        .headerHeading{
+            font-size: 100px;
+            /* font-family: 'Chalk', sans-serif; */
+            font-family: 'Inter', sans-serif;
+            font-weight: bolder;
+            word-spacing: 10px;
+            color: black;
+
+        }
+        .headerDescription{
+            font-size: 55px;
+            font-weight: bolder;
+            color: black;
+            width: 700px;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 6px;
+        }
+        .headerBtn{
+            width: 140px;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: #2e7d32;
+            border: none;
+            height: 40px;
+        }
+        .btnGuid{
+            padding-top: 30px;
+        }
+        .headerCard{
+            width: 96%;
+            background-color: #1b5e20;
+            height: 130px;
+        }
+        .innerHeader{
+            width: 95%;
+            background-color: white;
+            margin: 20px 0px 0px 100px
+        }
+        .mainHeaderGuid{
+            width: 95%;
+            background-color: transparent;
+            border-color: transparent;
+        }
+        .descriptionGuid{
+            width: 95%;
+            background-color: transparent;
+            border-color: transparent;
+            margin: 100px;
+        }
+        .descpSeparator {
+            height: 4px; /* Set the height (thickness) of the horizontal line */
+            background-color: black; /* Set the line color */
+            width: 90%;
+        }
+        .cardTitle{
+            text-align: center; 
+            font-size: 26px; 
+            font-family: cursive;
+            font-weight: bolder;
+        }
+    </style>
+</head>
+<body class="backgroundGridOne">
+    {% include 'nav.html' %}
+    <div class="header">
+        <!-- <h1 class="headerHeading">GUIDLANCE</h1>
+        <h2 class="headerDescription">GUIDLANCE – The Future of Education!</h2> -->
+        <!-- Button Guid -->
+        <!-- <div class="btnGuid">
+          <button type="button" class="btn btn-dark headerBtn">LEARN MORE</button>
+        </div> -->
+
+      
+        <div class="row" style="width: 98%;">
+            <div class="col-md-6">
+                <div class="card descriptionGuid">
+                    <h2 class="headerDescription">GUIDELANCE</h2>
+                    
+                    <h2 class="headerDescription">The <span style="color: #2e7d32;">Future</span> of <span style="color: #2e7d32;">Education</span>!</h2>
+                    <!-- <div class="card" style="background-color: black; height: 10px;width: 55%;"></div>
+                    <div class="card" style="background-color: black; height: 10px;margin-top: 2px;width: 65%;"></div> -->
+                    <div class="btnGuid">
+                      <button type="button" class="btn btn-dark headerBtn">LEARN MORE</button>
+                    </div>
+                </div>
+                <div class="card" style="height: 200px;margin-left: 40px;">
+                    <div class="card-body">
+                      <h5 class="card-title cardTitle">ARE YOU A TEACHER?</h5>
+                      <hr>
+                      <p class="card-text" style="text-align: center; padding-top: 10px;">Need any support? Just link button below.</p>
+                      <button type="button" class="btn btn-outline-success" style="margin-left: 30%;">Need Help</button>
+                      <button type="button" class="btn btn-outline-success" >Register ME!</button>
+                    </div>
+                  </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card" style="width: 100%;border: transparent;">
+                    <video id="animation-video" loop muted>
+                        <source src="{% static 'Images/animation.mp4' %}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <br/>
+                <br/>
+                <br/>
+                <div class="card" style="height: 200px;margin-top: 3px;">
+                    <div class="card-body">
+                      <h5 class="card-title cardTitle">ARE YOU A STUDENT?</h5>
+                      <hr>
+                      <p class="card-text" style="text-align: center; padding-top: 10px;">Need any support? Just link button below.</p>
+                      <button type="button" class="btn btn-outline-success" style="margin-left: 30%;">Need Help</button>
+                      <button type="button" class="btn btn-outline-success" >Register ME!</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+   
+      </div>
+      <!-- <div class="row">
+        <div class="col-sm-6 mb-3 mb-sm-0">
+          <div class="card" style="height: 200px;">
+            <div class="card-body">
+              <h5 class="card-title cardTitle">ARE YOU A TEACHER?</h5>
+              <hr>
+              <p class="card-text" style="text-align: center; padding-top: 10px;">Need any support? Just link button below.</p>
+              <button type="button" class="btn btn-outline-success" style="margin-left: 30%;">Need Help</button>
+              <button type="button" class="btn btn-outline-success" >Register ME!</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="card" style="height: 200px;">
+            <div class="card-body">
+              <h5 class="card-title cardTitle">ARE YOU A STUDENT?</h5>
+              <hr>
+              <p class="card-text" style="text-align: center; padding-top: 10px;">Need any support? Just link button below.</p>
+              <button type="button" class="btn btn-outline-success" style="margin-left: 30%;">Need Help</button>
+              <button type="button" class="btn btn-outline-success" >Register ME!</button>
+            </div>
+          </div>
+        </div>
+      </div> -->
+
+
+    <!-- Footer -->
+    <footer>
+        <!-- Your footer content goes here -->
+       
+    </footer>
+
+    <!-- Link to an external JavaScript file -->
+    <script src="script.js"></script>
+
+    <!-- Inline JavaScript (optional) -->
+    <script>
+        const video = document.getElementById("animation-video");
+    
+    // Play the video when the page loads
+        video.play();
+    
+    </script>
+</body>
+</html>
