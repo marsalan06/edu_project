@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Page Title</title>
+    <title>Sign Up Yourself!</title>
     
     <!-- Link to an external CSS file -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
@@ -89,29 +89,39 @@
                 <br/>
                 <form method="post" class="m-5">
                     <div class="form-row">
-                      <div class="form-group m-3"> 
+                      <div class="form-group m-3">
+                        {% if errors %}
+                        <div class="alert alert-warning" role="alert">
+                         {{errors}}
+                        </div>
+                        {% endif %}
+                        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
                         <label for="inputEmail4" class="label">EMAIL</label>           
-                        <input type="email" class="inputField form-control" id="inputEmail">
+                        <input type="email" name="email" class="inputField form-control" id="inputEmail">
                       </div>
                       <div class="form-group m-3">
                         <label for="inputEmail4" class="label">PASSWORD</label>
-                        <input type="password" class="inputField form-control" id="inputPassword">
+                        <input type="password" name="password" class="inputField form-control" id="inputPassword">
                       </div>
                     </div>
                     <div class="form-group m-3">
+                      <label for="inputEmail4" class="label">USER NAME</label>
+                      <input type="text" name="username" class="inputField form-control" id="inputAddress">
+                    </div>
+                    <!-- <div class="form-group m-3">
                       <label for="inputEmail4" class="label">CURRENT ADDRESS</label>
                       <input type="text" class="inputField form-control" id="inputAddress">
-                    </div>
-                    <div class="form-group m-3">
+                    </div> -->
+                    <!-- <div class="form-group m-3">
                         <label for="inputEmail4" class="label">PERMANENT ADDRESS</label>
                       <input type="text" class="inputField form-control" id="inputAddress2">
-                    </div>
-                    <div class="row m-2">
-                        <div class="form-group col-md-4">
+                    </div> -->
+                    <!-- <div class="row m-2"> -->
+                        <!-- <div class="form-group col-md-4">
                           <label for="inputCity" class="label">CITY</label>
                           <input type="text" class="inputField form-control" id="inputCity">
-                        </div>
-                        <div class="form-group col-md-5">
+                        </div> -->
+                        <!-- <div class="form-group col-md-5">
                           <label for="inputState" class="label">STATE</label>
                           <select id="inputState" class="inputField form-control">
                             <option selected>Choose...</option>
@@ -121,15 +131,15 @@
                         <div class="form-group col-md-3">
                           <label for="inputZip" class="label">ZIP</label>
                           <input type="text" class="inputField form-control" id="inputZip">
-                        </div>
-                      </div>
+                        </div> -->
+                      <!-- </div> -->
                       <div class="row m-2 mt-5">
                         <div class="col-md-3">
-                            <button type="button" class="btn btn-outline-success label BtnCSS" style="text-align: center;">SIGNUP</button>
+                            <button type="submit" class="btn btn-outline-success label BtnCSS" style="text-align: center;">SIGN UP</button>
                         </div>
-                        <div class="col-md-2">
+                        <!-- <div class="col-md-2">
                             <button type="button" class="btn btn-outline-primary label BtnCSS" style="text-align: center;">LOGIN</button>
-                        </div>
+                        </div> -->
                       </div>
                      
                       

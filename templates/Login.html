@@ -86,26 +86,32 @@
               </div>
               <div class="col-md-6" style="border: 1px solid black; background-color: white; height: 570px;">
                 <br/>
-                <form class="m-5">
+                <form method="post" class="m-5">
                     <div class="form-row">
                     <h2>WELCOME BACK</h2>
                     <br/>
                       <div class="form-group m-3"> 
-                        <label for="inputEmail4" class="label">EMAIL</label>           
-                        <input type="email" class="inputField form-control" id="inputEmail">
+                        {% if errors %}
+                        <div class="alert alert-warning" role="alert">
+                         {{errors}}
+                        </div>
+                        {% endif %}
+                        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                        <label for="inputEmail4" class="label">USERNAME</label>           
+                        <input type="username" name="username" class="inputField form-control" id="inputEmail">
                       </div>
                       <div class="form-group m-3">
                         <label for="inputEmail4" class="label">PASSWORD</label>
-                        <input type="password" class="inputField form-control" id="inputPassword">
+                        <input type="password" name="password" class="inputField form-control" id="inputPassword">
                       </div>
                     </div>
                       <div class="row m-2 mt-5">
                         <div class="col-md-3">
-                            <button type="button" class="btn btn-outline-success label BtnCSS" style="text-align: center;">SIGNUP</button>
+                            <button type="submit" class="btn btn-outline-success label BtnCSS" style="text-align: center;">SIGN IN</button>
                         </div>
-                        <div class="col-md-2">
+                        <!-- <div class="col-md-2">
                             <button type="button" class="btn btn-outline-primary label BtnCSS" style="text-align: center;">LOGIN</button>
-                        </div>
+                        </div> -->
                       </div>
                   </form>
               </div>

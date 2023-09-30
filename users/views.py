@@ -6,16 +6,27 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import UserSerializer, TeacherSerializer, StudentSerializer
 from django.views import View
-from django.http import JsonResponse
+from django.shortcuts import redirect
+from django.http import JsonResponse, HttpResponse
 from django.middleware.csrf import get_token
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from rest_framework import viewsets
 from .models import Teacher, Student
 from django.contrib.auth.models import User
+from django.middleware.csrf import get_token
+from django.contrib.auth import logout
+
+
 
 def index(request):
-    return render(request,'index.html')
+    context = {}
+    if request.user.is_authenticated:
+        context['is_authenticated'] = True
+        context['username'] = request.user.username
+    else:
+        context['is_authenticated'] = False
+    return render(request,'index.html', context)
 
 class UserRegistrationView(APIView):
     @csrf_exempt if settings.DEBUG else None
@@ -23,16 +34,30 @@ class UserRegistrationView(APIView):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            return Response({'message': 'User registered successfully.'}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+            # return Response({'message': 'User registered successfully.'}, status=status.HTTP_201_CREATED)
+            return redirect('user-login')
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # return JsonResponse({'message': 'User not registered.','errors': serializer.errors,'status':status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+        error_messages = [str(value[0]) for value in serializer.errors.values()]
+        
+        # Join the error messages into a single string
+        all_errors = ", ".join(error_messages)
+        return render(request, 'Signup.html', {'form': serializer, 'errors': all_errors})
+     
     def get(self,request):
         context = {}
+        if request.user.is_authenticated:
+            context['is_authenticated'] = True
+            context['username'] = request.user.username
+        else:
+            context['is_authenticated'] = False
+        context['csrf_token'] = get_token(request)
         return render(request, 'Signup.html',context)
 
 class UserLoginView(APIView):
     @csrf_exempt if settings.DEBUG else None
     def post(self, request):
+        context = {}
         username = request.data.get('username')
         password = request.data.get('password')
 
@@ -41,11 +66,20 @@ class UserLoginView(APIView):
         if user is not None:
             login(request, user)
             # Generate and return a token or session ID for subsequent requests
-            return Response({'message': 'Login successful.'}, status=status.HTTP_200_OK)
-        return Response({'message': 'Invalid username or password.'}, status=status.HTTP_401_UNAUTHORIZED)
-    
+            # return Response({'message': 'Login successful.'}, status=status.HTTP_200_OK)
+            return redirect('index')
+        # return Response({'message': 'Invalid username or password.'}, status=status.HTTP_401_UNAUTHORIZED)
+        context['errors'] = 'Invalid username or password.'
+        return render(request, 'Login.html',context)
+     
     def get(self,request):
         context = {}
+        if request.user.is_authenticated:
+            context['is_authenticated'] = True
+            context['username'] = request.user.username
+        else:
+            context['is_authenticated'] = False
+        context['csrf_token'] = get_token(request)
         return render(request, 'Login.html',context)
 
 
@@ -61,17 +95,11 @@ class TeacherViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         # Check if the user already exists
         username = request.data.get('user')['username']
-        print("=========12121=====")
-        print(username)
         try:
-            print("======try=====")
             user = User.objects.get(username=username)
-            print(user)
             if Teacher.objects.filter(user=user.id).exists():
-                print("====teacher exists====")
                 return Response({"message": "User already has a teacher record."}, status=status.HTTP_400_BAD_REQUEST)
         except User.DoesNotExist:
-            print("=====user doesnt exists=====")
             # Create the user
             user_serializer = UserSerializer(data=request.data.get('user'))
             if user_serializer.is_valid():
@@ -81,9 +109,7 @@ class TeacherViewSet(viewsets.ModelViewSet):
 
         # Check if the teacher record already exists
         # Create the teacher
-        print("=========teacher level=======")
         request.data['user'] = user.id
-        print(request.data)
         teacher_serializer = TeacherSerializer(data=request.data)
         if teacher_serializer.is_valid():
             teacher_serializer.save(user=user)
@@ -100,17 +126,13 @@ class StudentViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         # Check if the user already exists
         username = request.data.get('user')['username']
-        print("=========12121=====")
         print(username)
         try:
-            print("======try=====")
             user = User.objects.get(username=username)
             print(user)
             if Student.objects.filter(user=user.id).exists():
-                print("====student exists====")
                 return Response({"message": "User already has a student record."}, status=status.HTTP_400_BAD_REQUEST)
         except User.DoesNotExist:
-            print("=====user doesnt exists=====")
             # Create the user
             user_serializer = UserSerializer(data=request.data.get('user'))
             if user_serializer.is_valid():
@@ -120,9 +142,7 @@ class StudentViewSet(viewsets.ModelViewSet):
 
         # Check if the student record already exists
         # Create the student
-        print("=========student level=======")
         request.data['user'] = user.id
-        print(request.data)
         student_serializer = StudentSerializer(data=request.data)
         if student_serializer.is_valid():
             student_serializer.save(user=user)
@@ -130,3 +150,9 @@ class StudentViewSet(viewsets.ModelViewSet):
             return Response(student_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(student_serializer.data, status=status.HTTP_201_CREATED)
+    
+
+def logout_view(request):
+    logout(request)
+    # Redirect to a page after logout (e.g., the homepage)
+    return redirect('index')
