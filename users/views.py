@@ -93,10 +93,15 @@ class TeacherViewSet(viewsets.ModelViewSet):
     serializer_class = TeacherSerializer
 
     def create(self, request, *args, **kwargs):
+        print("=====am i working====")
+        print(request.data)
+        request.data._mutable = True
         # Check if the user already exists
-        username = request.data.get('user')['username']
+        username = request.data.get('username')
+        print("====usser name ===,",username)
         try:
             user = User.objects.get(username=username)
+            print("=====user found===,",user)
             if Teacher.objects.filter(user=user.id).exists():
                 return Response({"message": "User already has a teacher record."}, status=status.HTTP_400_BAD_REQUEST)
         except User.DoesNotExist:
@@ -117,6 +122,19 @@ class TeacherViewSet(viewsets.ModelViewSet):
             return Response(teacher_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(teacher_serializer.data, status=status.HTTP_201_CREATED)
+    
+    def list(self, request):
+        context = {}
+        if request.user.is_authenticated:
+            context['is_authenticated'] = True
+            context['username'] = request.user.username
+        else:
+            context['is_authenticated'] = False
+        context['csrf_token'] = get_token(request)
+        context['user'] = request.user
+        context['available_qualifications'] = Teacher.EXPERTISE_CHOICES
+        # Render the HTML form for teacher registration on GET request
+        return render(request, 'teacher_reg.html', context)
 
 
 class StudentViewSet(viewsets.ModelViewSet):
