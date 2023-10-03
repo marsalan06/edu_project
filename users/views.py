@@ -93,15 +93,12 @@ class TeacherViewSet(viewsets.ModelViewSet):
     serializer_class = TeacherSerializer
 
     def create(self, request, *args, **kwargs):
-        print("=====am i working====")
         print(request.data)
         request.data._mutable = True
         # Check if the user already exists
         username = request.data.get('username')
-        print("====usser name ===,",username)
         try:
             user = User.objects.get(username=username)
-            print("=====user found===,",user)
             if Teacher.objects.filter(user=user.id).exists():
                 return Response({"message": "User already has a teacher record."}, status=status.HTTP_400_BAD_REQUEST)
         except User.DoesNotExist:
@@ -143,8 +140,9 @@ class StudentViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         # Check if the user already exists
-        username = request.data.get('user')['username']
-        print(username)
+        request.data._mutable = True
+        # Check if the user already exists
+        username = request.data.get('username')
         try:
             user = User.objects.get(username=username)
             print(user)
@@ -168,6 +166,19 @@ class StudentViewSet(viewsets.ModelViewSet):
             return Response(student_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(student_serializer.data, status=status.HTTP_201_CREATED)
+    
+    def list(self, request):
+        context = {}
+        if request.user.is_authenticated:
+            context['is_authenticated'] = True
+            context['username'] = request.user.username
+        else:
+            context['is_authenticated'] = False
+        context['csrf_token'] = get_token(request)
+        context['user'] = request.user
+        context['available_specialization'] = Student.SPECIALIZATION_CHOICES
+        # Render the HTML form for teacher registration on GET request
+        return render(request, 'student_reg.html', context)
     
 
 def logout_view(request):

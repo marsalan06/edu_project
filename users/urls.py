@@ -11,7 +11,7 @@ urlpatterns = [
     path('login/', UserLoginView.as_view(), name='user-login'),
     path('get_csrf/',GetCSRF.as_view(),name='get-csrf'),
     path('',include(router.urls)),
-    path('logout/',logout_view, name="logout")
+    path('logout/',logout_view, name="logout"),
 ]
 
 

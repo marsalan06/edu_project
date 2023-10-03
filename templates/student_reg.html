@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher Registration</title>
+    <title>Student Registration</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- Include Select2 CSS -->
@@ -23,7 +23,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@800&display=swap" rel="stylesheet">
     <!-- <link rel="stylesheet" href="css/styles.css"> -->
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+    <!-- Include Bootstrap Datepicker JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <!-- Inline CSS styles (optional) -->
     <style>
         @font-face {
@@ -107,7 +110,7 @@
                 <br/>
                 <form method="post" class="m-5">
                     <div class="form-row">
-                        <h2>TEACHER REGISTRATION</h2>
+                        <h2>STUDENT REGISTRATION</h2>
                         <br/>
                         <div class="form-group m-3">
                             {% if errors %}
@@ -127,27 +130,34 @@
                             <label for="inputUsername" class="label">USER NAME</label>
                             <input type="text" name="username" class="inputField form-control" id="inputUsername" value="{{user.username}}" required>
                         </div>
+
                         <div class="form-group m-3">
-                            <label for="inputQualifications" class="label">QUALIFICATIONS</label>
-                            <input type="text" name="qualifications" placeholder="Enter Your Latest Qualification" class="inputField form-control" id="inputQualifications" required>
+                            <label for="inputDate" class="label">DATE OF BIRTH</label>
+                            <input type="text" name="dob" id="datepicker" class="form-control" placeholder="Whats Your Date Of Birth">
+                        </div>
+
+
+                        <div class="form-group m-3">
+                            <label for="inputGrade" class="label">GRADE</label>
+                            <input type="text" name="grade" class="inputField form-control" placeholder="Grade You Study In" id="inputGrade" required>
                         </div>
                         <div class="form-group m-3">
-                            <label for="inputExpertise" class="label">EXPERTISE</label>
+                            <label for="inputExpertise" class="label">SPECIALIZATION</label>
                             <!-- <input type="text" name="expertise" class="inputField form-control" id="inputExpertise" required> -->
-                            <select name="expertise" placeholder="Select Your Expertise" id="inputExpertise" class="inputField form-control" multiple required>
-                                {% for expertise_code, expertise_label in available_qualifications %}
-                                    <option value="{{ expertise_code }}">{{ expertise_label }}</option>
+                            <select name="specialization" id="inputExpertise" class="inputField form-control" multiple required>
+                                {% for specialization_code, specialization_label in available_specialization %}
+                                    <option value="{{ specialization_code }}">{{ specialization_label }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div class="form-group m-3">
-                            <label for="inputTeacherName" class="label">TEACHER NAME</label>
+                            <label for="inputTeacherName" class="label">STUDENT NAME</label>
                             <input type="text" name="teacher_name" class="inputField form-control" placeholder="Your Custom Student Name" id="inputTeacherName" required>
                         </div>
                     </div>
                     <div class="row m-2 mt-5">
                         <div class="col-md-3">
-                            <button type="submit" class="btn btn-outline-success label teacher-registration-button" style="width: max-content; text-align: center;">START TEACHING !</button>
+                            <button type="submit" class="btn btn-outline-success label teacher-registration-button" style="width: max-content; text-align: center;">LET THE LEARNING BEGING !</button>
                         </div>
                     </div>
                 </form>
@@ -175,11 +185,20 @@
     <script>
         $(document).ready(function() {
             $('#inputExpertise').select2({
-                placeholder: 'Select expertise',
+                placeholder: 'Select Your Major',
                 tags: true, // Allow custom tags
             });
         });
     </script>
+    <script>
+        $(document).ready(function () {
+            $('#datepicker').datepicker({
+                format: 'yyyy-mm-dd',
+            });
+            
+        });
+    </script>
+
     
 </body>
 <!-- Include jQuery (required for Select2) -->
