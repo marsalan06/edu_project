@@ -100,7 +100,7 @@ class TeacherViewSet(viewsets.ModelViewSet):
         try:
             user = User.objects.get(username=username)
             if Teacher.objects.filter(user=user.id).exists():
-                return Response({"message": "User already has a teacher record."}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(["User already has a teacher record."], status=status.HTTP_400_BAD_REQUEST)
         except User.DoesNotExist:
             # Create the user
             user_serializer = UserSerializer(data=request.data.get('user'))

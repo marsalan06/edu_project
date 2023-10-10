@@ -53,4 +53,24 @@ class TeacherSessionAPIView(APIView):
             return TeachingSession.objects.get(pk=pk)
         except TeachingSession.DoesNotExist:
             raise status.HTTP_404_NOT_FOUND
+        
+
+def available_teacher(request):
+    # Retrieve a list of available teachers from your model (Teacher model)
+    # teachers = Teacher.objects.all()  # Replace with your actual query
+
+
+    context = {}
+
+    if request.user.is_authenticated:
+            context['is_authenticated'] = True
+            context['username'] = request.user.username
+    else:
+            context['is_authenticated'] = False
+        
+    teachers_list = Teacher.objects.all().values()
+    context['teachers'] = teachers_list
+    print("=====context====")
+    print(context)
+    return render(request, 'teacher_availability.html', context)
 
