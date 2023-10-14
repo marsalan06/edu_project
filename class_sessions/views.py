@@ -29,6 +29,7 @@ class TeacherSessionAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
+        print("======request.data==",request.data)
         serializer = TeachingSessionSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
