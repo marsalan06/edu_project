@@ -25,7 +25,7 @@ class ZoomOAuthRedirectView(View):
     def get(self, request):
         # zoom_authorization_url = f'https://zoom.us/oauth/authorize?response_type=code&client_id={settings.CLIENT_ID}&redirect_uri={settings.REDIRECT_URI}'
         print("=====tittiiittss====")
-        zoom_authorization_url = 'https://zoom.us/oauth/authorize?response_type=code&client_id=00nl0kjuR1a9rCH0u83F1A&redirect_uri=http%3A%2F%2F0.0.0.0%3A8001%2Fzoom%2Foauth%2Fcallback'
+        zoom_authorization_url = 'https://zoom.us/oauth/authorize?response_type=code&client_id=00nl0kjuR1a9rCH0u83F1A&redirect_uri=http%3A%2F%2F0.0.0.0%3A8000%2Fzoom%2Foauth%2Fcallback'
         return redirect(zoom_authorization_url)
         # print("======titsd====")
         # return None
@@ -41,19 +41,19 @@ class ZoomOAuthCallbackView(View):
         payload = {
             'grant_type': 'authorization_code',
             'code': code,
-            'redirect_uri': 'http://0.0.0.0:8001/zoom/oauth/callback'
+            'redirect_uri': 'http://0.0.0.0:8000/zoom/oauth/callback'
         }
 
         # Encode the client ID and client secret
         client_id = '00nl0kjuR1a9rCH0u83F1A'
-        client_secret = 'zx5ERBKMamZc5ibEvdj5nSP7n5cQ6vI'
+        client_secret = 'zx5ERBKMamKZc5ibEvdj5nSP7n5cQ6vI'
         # credentials = f'{client_id}:{client_secret}'
         credentials = client_id + ":" + client_secret
         print("-------cred----")
         print(credentials)
         print("========encoded creds=====")
         # print(bytes(credentials,'utf-8'))
-        encoded_credentials = base64.b64encode(credentials.encode()).decode('utf-8')
+        encoded_credentials = base64.b64encode(credentials.encode('utf-8')).decode('utf-8')
 
         print("======encoded crexxxxds encodes====")
         # encoded_credentials = urlsafe_b64encode(bytes(credentials,'utf-8')).decode('utf-8')
@@ -63,8 +63,10 @@ class ZoomOAuthCallbackView(View):
         # Set the headers
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': 'Basic MDBubDBranVSMWE5ckNIMHU4M0YxQTp6eDVFUkJLTWFtS1pjNWliRXZkajVuU1A3bjVjUTZ2SQ=='
+            'Authorization': f'Basic {base64.b64encode(f"{client_id}:{client_secret}".encode("utf-8")).decode("utf-8")}'
         }
+
+        #Basic MDBubDBranVSMWE5ckNIMHU4M0YxQTp6eDVFUkJLTWFtS1pjNWliRXZkajVuU1A3bjVjUTZ2SQ==
         print(headers)
 
         # Send the POST request
