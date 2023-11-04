@@ -1,14 +1,21 @@
 # urls.py
 
-from django.urls import path, include
-from .views import ZoomOAuthCallbackView, ZoomOAuthRedirectView, ZoomMeetingAPIView
+from django.urls import include, path
+
+from .utils import call_oauth_method
+from .views import (ZoomMeetingAPIView, ZoomOAuthCallbackView,
+                    ZoomOAuthRedirectView)
 
 # Create a router and register our viewset with it.
 
 urlpatterns = [
-    path('oauth/redirect/',ZoomOAuthRedirectView.as_view(),name='zoom_oauth_redirect'),
-    path('oauth/callback/',ZoomOAuthCallbackView.as_view(),name='zoom_oauth_callback'),
-    path('meeting/',ZoomMeetingAPIView.as_view(),name='zoom-meeting')
+    path('oauth/redirect/', ZoomOAuthRedirectView.as_view(),
+         name='zoom_oauth_redirect'),
+    path('oauth/callback/', ZoomOAuthCallbackView.as_view(),
+         name='zoom_oauth_callback'),
+    path('meeting/', ZoomMeetingAPIView.as_view(), name='zoom-meeting'),
+    path('oauth-method/', call_oauth_method, name='oauth-method'),
+
 ]
 
 # GET /call/zoom-meetings/: List all Zoom meetings.

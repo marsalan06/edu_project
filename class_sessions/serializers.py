@@ -35,7 +35,6 @@ class TeachingSessionSerializer(serializers.ModelSerializer):
             print(validated_data)
             # teacher_session_object = TeachingSession.objects.create(**validated_data)
             teacher_session_object = TeachingSession.objects.create(**validated_data)
-            return teacher_session_object
         else:
             print("====else case====")
         print("======i am here-----")

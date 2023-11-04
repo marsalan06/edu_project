@@ -83,6 +83,9 @@
                         <button class="btn btn-outline-success create-session-button" data-teacher-id="{{ teacher.id }}">Create Session</button>
                         <button class="btn btn-primary submit-button" data-teacher-id="{{ teacher.id }}" style="display: none; margin-left: 10px;">Submit</button>
                         <button class="btn btn-secondary cancel-button" data-teacher-id="{{ teacher.id }}" style="display: none; margin-left: 20 px;">Cancel</button>                    
+                        <button class="btn btn-primary create-meeting-button" data-teacher-id="{{ teacher.id }}" style="display: none; margin-left: 10px;">Create Meeting</button>
+                        <div id="error-message" style="color: red;"></div>
+
                     </div>
                 </div>
                 {% endfor %}
@@ -109,6 +112,7 @@
     <!-- Link to an external JavaScript file -->
     <script src="script.js"></script>
     <script src="{% static 'js/session.js' %}"></script>
+    <script src="{% static 'js/meeting.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
 </body>
