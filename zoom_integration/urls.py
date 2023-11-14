@@ -3,8 +3,8 @@
 from django.urls import include, path
 
 from .utils import call_oauth_method
-from .views import (ZoomMeetingAPIView, ZoomOAuthCallbackView,
-                    ZoomOAuthRedirectView)
+from .views import (ClearSessionView, ZoomMeetingAPIView,
+                    ZoomOAuthCallbackView, ZoomOAuthRedirectView)
 
 # Create a router and register our viewset with it.
 
@@ -15,6 +15,8 @@ urlpatterns = [
          name='zoom_oauth_callback'),
     path('meeting/', ZoomMeetingAPIView.as_view(), name='zoom-meeting'),
     path('oauth-method/', call_oauth_method, name='oauth-method'),
+    path('clear_session/', ClearSessionView.as_view(), name='clear_session'),
+
 
 ]
 

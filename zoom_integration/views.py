@@ -2,10 +2,11 @@ import base64
 import json
 import urllib.parse
 from base64 import urlsafe_b64encode
+from datetime import datetime, timedelta
 
 import requests
 from django.conf import settings
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -23,11 +24,18 @@ from .serializers import ZoomMeetingSerializer
 # @method_decorator(csrf_exempt, name='get')
 class ZoomOAuthRedirectView(View):
     def get(self, request):
-        # zoom_authorization_url = f'https://zoom.us/oauth/authorize?response_type=code&client_id={settings.CLIENT_ID}&redirect_uri={settings.REDIRECT_URI}'
-        print("=====tittiiittss====")
-        zoom_authorization_url = 'https://zoom.us/oauth/authorize?response_type=code&client_id=00nl0kjuR1a9rCH0u83F1A&redirect_uri=http%3A%2F%2F0.0.0.0%3A8000%2Fzoom%2Foauth%2Fcallback'
-        redirect(zoom_authorization_url)
-        return redirect(zoom_authorization_url)
+        access_token = request.session.get('zoom_access_token')
+        expiration_time_str = request.session.get(
+            'zoom_access_token_expires_at')
+
+        if not access_token or (expiration_time_str and datetime.fromisoformat(expiration_time_str) < datetime.now()):
+            # zoom_authorization_url = f'https://zoom.us/oauth/authorize?response_type=code&client_id={settings.CLIENT_ID}&redirect_uri={settings.REDIRECT_URI}'
+            print("=====tittiiittss====")
+            zoom_authorization_url = 'https://zoom.us/oauth/authorize?response_type=code&client_id=00nl0kjuR1a9rCH0u83F1A&redirect_uri=http%3A%2F%2F0.0.0.0%3A8000%2Fzoom%2Foauth%2Fcallback'
+            redirect(zoom_authorization_url)
+            return redirect(zoom_authorization_url)
+
+        return redirect('zoom-meeting')
         # print("======titsd====")
         # return None
 
@@ -78,9 +86,21 @@ class ZoomOAuthCallbackView(View):
             access_token = response.json()['access_token']
             print("=========access_Token======", access_token)
             request.session['zoom_access_token'] = access_token
+            print("---3---3----3", response.json()['expires_in'],
+                  datetime.now(), "====nopw====")
+            print("=====3==32==1==2==", timedelta(
+                seconds=response.json()['expires_in']))
+
+            expiry = datetime.now(
+            ) + timedelta(seconds=response.json()['expires_in'])
+            request.session['zoom_access_token_expires_at'] = expiry.isoformat()
+
             print(request.session['zoom_access_token'],
                   "=====from session====")
-            return render(request, 'close_window.html')
+            print("==========end======",
+                  request.session['zoom_access_token_expires_at'])
+            # return JsonResponse({'access_token': request.session['zoom_access_token']}, status=200)
+            return redirect('zoom-meeting')
         else:
             return JsonResponse({'error': 'OAuth token retrieval failed'}, status=500)
         # Print the response
@@ -120,10 +140,12 @@ class ZoomMeetingAPIView(APIView):
     def get(self, request):
         access_token = request.session.get(
             'zoom_access_token')  # Get access_token from session
-        if not access_token:
+        expiry = request.session.get('zoom_access_token_expires_at')
+
+        if not access_token or expiry and datetime.fromisoformat(expiry) < datetime.now():
             return JsonResponse({'error': 'Access token required'}, status=400)
 
-        return render(request, 'create_meeting_form.html', {'access_token': access_token})
+        return render(request, 'create_meeting_form.html', {'access_token': access_token, 'expiry': expiry})
 
     def post(self, request):
         # access_token = request.data.get('access_token')
@@ -150,3 +172,18 @@ class ZoomMeetingAPIView(APIView):
         else:
             # Handle the case where token refresh fails
             return None
+
+
+class ClearSessionView(View):
+    def get(self, request):
+        # Clear the entire session
+        # request.session.clear()
+
+        # Alternatively, you can clear specific keys from the session
+        if 'zoom_access_token' in request.session:
+            del request.session['zoom_access_token']
+        if 'zoom_access_token_expires_at' in request.session:
+            del request.session['zoom_access_token_expires_at']
+
+        # Redirect to your home page or another appropriate location
+        return JsonResponse({"success": "session cleared"}, status=200)

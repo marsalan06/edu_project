@@ -47,6 +47,15 @@
         label {
          cursor: default;
         }
+        .custom-label {
+        display: inline-block;
+        padding: 8px 12px;
+        background-color: #8FBC8F; /* Light green color */
+        color: #000; /* Black text color */
+        font-weight: bold;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
     </style>
 </head>
 <body>
@@ -71,8 +80,9 @@
                         <h2>Name: {{teacher.teacher_name}}</h2>
                         <h5>Expertise: </h5>
                         {% for expertise in teacher.expertise %}
-                        <input type="radio" id="expertise-{{ teacher.id }}" name="expertise" value="{{ expertise }}">
-                        <label for="expertise-{{ teacher.id }}">{{ expertise }}</label>
+                        <!--this is the input radio button-->
+                        <!-- <input type="radio" id="expertise-{{ teacher.id }}" name="expertise" value="{{ expertise }}"> -->
+                        <label class="custom-label" for="expertise-{{ teacher.id }}">{{ expertise }}</label>
                         <!-- <p>Experience: X years</p> -->
                         {% endfor %}
                         <input type="date" id="date-{{ teacher.id }}" style="display: none;">
@@ -80,7 +90,7 @@
                         <input type="text" placeholder="Enter Description" id="description-{{ teacher.id }}" style="display: none;">
                         <input type="text" placeholder="Enter Topic" id="topic-{{ teacher.id }}" style="display: none;">
                         <br>
-                        <button class="btn btn-outline-success create-session-button" data-teacher-id="{{ teacher.id }}">Create Session</button>
+                        <button onclick="redirectToZoomOAuth()", class="btn btn-outline-success create-session-button" data-teacher-id="{{ teacher.id }}">Create Session</button>
                         <button class="btn btn-primary submit-button" data-teacher-id="{{ teacher.id }}" style="display: none; margin-left: 10px;">Submit</button>
                         <button class="btn btn-secondary cancel-button" data-teacher-id="{{ teacher.id }}" style="display: none; margin-left: 20 px;">Cancel</button>                    
                         <form action="{% url 'zoom_oauth_redirect' %}" method="get" target="_blank">
@@ -113,7 +123,7 @@
     
     <!-- Link to an external JavaScript file -->
     <script src="script.js"></script>
-    <script src="{% static 'js/session.js' %}"></script>
+    <!-- <script src="{% static 'js/session.js' %}"></script> -->
     <!-- <script src="{% static 'js/meeting.js' %}"></script> -->
     <script>
       function checkForAccessToken() {
@@ -128,6 +138,13 @@
     // Polling interval (every 1 second in this example)
     var pollingInterval = setInterval(checkForAccessToken, 1000);
     </script>
+    <script>
+        function redirectToZoomOAuth() {
+            // Redirect to your Django OAuth view
+            window.location.href = "{% url 'zoom_oauth_redirect' %}";
+        }
+    </script>
+    
     
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
