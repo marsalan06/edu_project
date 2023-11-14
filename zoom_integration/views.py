@@ -73,38 +73,57 @@ class ZoomOAuthCallbackView(View):
         # Send the POST request
         response = requests.post(token_url, headers=headers, data=payload)
 
+        if response.status_code == 200:
+            print("==========success======")
+            access_token = response.json()['access_token']
+            print("=========access_Token======", access_token)
+            request.session['zoom_access_token'] = access_token
+            print(request.session['zoom_access_token'],
+                  "=====from session====")
+            return render(request, 'close_window.html')
+        else:
+            return JsonResponse({'error': 'OAuth token retrieval failed'}, status=500)
         # Print the response
-        print(response.status_code)
-        print(response.json())
+        # print(response.status_code)
+        # print(response.json())
 
-        print("========")
-        # print(response.json()['access_token'])
-        request.session['zoom_access_token'] = response.json()[
-            'access_token']
+        # print("========")
+        # # print(response.json()['access_token'])
+        # request.session['zoom_access_token'] = response.json()[
+        #     'access_token']
 
-        # print("=========req session token====",
-        #       request.session['zoom_access_token'])
+        # # print("=========req session token====",
+        # #       request.session['zoom_access_token'])
 
-        # url = "http://0.0.0.0:8000/zoom/meeting/"
+        # # url = "http://0.0.0.0:8000/zoom/meeting/"
 
-        # payload = json.dumps({
-        #     "topic": "test topic 101",
-        #     "start_time": "2023-11-05T14:00:00Z",
-        #     "duration": "60",
-        #     "access_token": request.session['zoom_access_token'],
-        # })
-        # headers = {
-        #     'Content-Type': 'application/json'
-        # }
+        # # payload = json.dumps({
+        # #     "topic": "test topic 101",
+        # #     "start_time": "2023-11-05T14:00:00Z",
+        # #     "duration": "60",
+        # #     "access_token": request.session['zoom_access_token'],
+        # # })
+        # # headers = {
+        # #     'Content-Type': 'application/json'
+        # # }
 
-        # response = requests.request("POST", url, headers=headers, data=payload)
+        # # response = requests.request("POST", url, headers=headers, data=payload)
 
-        print(response.text)
+        # print(response.text)
+        # return render(request, 'close_window.html')
 
-        return JsonResponse({"acc_Token": response.json()['access_token']})
+        # return JsonResponse({"acc_Token": response.json()['access_token']})
 
 
 class ZoomMeetingAPIView(APIView):
+
+    def get(self, request):
+        access_token = request.session.get(
+            'zoom_access_token')  # Get access_token from session
+        if not access_token:
+            return JsonResponse({'error': 'Access token required'}, status=400)
+
+        return render(request, 'create_meeting_form.html', {'access_token': access_token})
 
     def post(self, request):
         # access_token = request.data.get('access_token')

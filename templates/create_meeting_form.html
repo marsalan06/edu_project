@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Zoom Meeting</title>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        {{access_token}}
+        <input type="text" name="topic" placeholder="Meeting Topic" required>
+        <input type="datetime-local" name="time" required>
+        <input type="number" name="duration" placeholder="Duration (minutes)" required>
+        <input type="hidden" name="access_token" value="{{ access_token }}">
+        <button type="submit">Create Zoom Meeting</button>
+    </form>
+
+    <div id="meetingResult"></div>
+</body>
+</html>

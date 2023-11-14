@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Zoom OAuth Callback</title>
+    <script>
+        // JavaScript to close the window or redirect it
+        sessionStorage.setItem('zoom','abc');
+        // window.opener.focus();
+        window.opener.location.reload();
+        window.close();
+        
+    </script>
+</head>
+<body>
+    <!-- You can display a message to the user if needed -->
+    <p>Authorization successful. You can close this window.</p>
+</body>
+</html>

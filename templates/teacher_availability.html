@@ -83,7 +83,9 @@
                         <button class="btn btn-outline-success create-session-button" data-teacher-id="{{ teacher.id }}">Create Session</button>
                         <button class="btn btn-primary submit-button" data-teacher-id="{{ teacher.id }}" style="display: none; margin-left: 10px;">Submit</button>
                         <button class="btn btn-secondary cancel-button" data-teacher-id="{{ teacher.id }}" style="display: none; margin-left: 20 px;">Cancel</button>                    
-                        <button class="btn btn-primary create-meeting-button" data-teacher-id="{{ teacher.id }}" style="display: none; margin-left: 10px;">Create Meeting</button>
+                        <form action="{% url 'zoom_oauth_redirect' %}" method="get" target="_blank">
+                            <button class="btn btn-primary create-meeting-button" data-teacher-id="{{ teacher.id }}" style="display: none; margin-left: 10px;">Create Meeting</button>
+                        </form>
                         <div id="error-message" style="color: red;"></div>
 
                     </div>
@@ -112,7 +114,21 @@
     <!-- Link to an external JavaScript file -->
     <script src="script.js"></script>
     <script src="{% static 'js/session.js' %}"></script>
-    <script src="{% static 'js/meeting.js' %}"></script>
+    <!-- <script src="{% static 'js/meeting.js' %}"></script> -->
+    <script>
+      function checkForAccessToken() {
+        var accessToken = sessionStorage.getItem('zoom_access_token');
+        if (accessToken) {
+            // Access token found, stop polling and use it
+            clearInterval(pollingInterval);
+            console.log('Access Token in Parent Window:', accessToken);
+        }
+    }
+
+    // Polling interval (every 1 second in this example)
+    var pollingInterval = setInterval(checkForAccessToken, 1000);
+    </script>
+    
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
 </body>
