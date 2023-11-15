@@ -100,7 +100,7 @@ class ZoomOAuthCallbackView(View):
             print("==========end======",
                   request.session['zoom_access_token_expires_at'])
             # return JsonResponse({'access_token': request.session['zoom_access_token']}, status=200)
-            return redirect('zoom-meeting')
+            return redirect('available_teacher')
         else:
             return JsonResponse({'error': 'OAuth token retrieval failed'}, status=500)
         # Print the response

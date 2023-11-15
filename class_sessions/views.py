@@ -1,4 +1,6 @@
 # Create your views here.
+from datetime import datetime
+
 from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework import status
@@ -72,12 +74,24 @@ def available_teacher(request):
 
     teachers_list = Teacher.objects.all().values()
     context['teachers'] = teachers_list
+
     if 'zoom_access_token' in request.session:
         access_token = request.session['zoom_access_token']
         context['access_token'] = access_token
-    if 'zoom_access_token_expires_at' in request.session:
-        expiry = request.session['zoom_access_token_expires_at']
-        context['expiry'] = expiry
+
+        # Check if the access token has expired
+        expiry_str = request.session.get('zoom_access_token_expires_at')
+        context['expiry'] = expiry_str
+        if expiry_str:
+            expiry_time = datetime.fromisoformat(expiry_str)
+            if expiry_time < datetime.now():
+                context['token_expired'] = True
+            else:
+                context['token_expired'] = False
+    else:
+        print('=---s--s---s---')
+        context['token_expired'] = True
+
     print("=====context====")
-    print(context)
+    print(context, datetime.now())
     return render(request, 'teacher_availability.html', context)

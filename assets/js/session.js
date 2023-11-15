@@ -1,5 +1,23 @@
 $(document).ready(function() {
-    $('.create-session-button').click(function() {
+    var token_expired_getter = token_expired
+        console.log("========t=t==t=====")
+        console.log(token_expired_getter)
+
+        if (token_expired_getter == true){
+            console.log("=====if condition====")
+            $('.create-meeting-button').hide();
+            $('.create-session-button').show();
+            console.log("-p-p-p-p-")
+            
+        }
+        else if (token_expired_getter == false){
+            console.log("=======false else if=======")
+            $('.create-session-button').hide();
+            $('.create-meeting-button').show();
+        }
+
+    $('.create-meeting-button').click(function() {
+        
         var teacherId = $(this).data('teacher-id');
         
         // Toggle visibility of input fields, radio buttons, and buttons
@@ -98,6 +116,8 @@ $(document).ready(function() {
 
     $('.cancel-button').click(function() {
         var teacherId = $(this).data('teacher-id');
+        console.log("-----cancle button------")
+        console.log(teacherId)
         
         // Hide the input fields and buttons
         $('#date-' + teacherId).hide();
@@ -106,8 +126,8 @@ $(document).ready(function() {
         $('#topic-' + teacherId).hide();
         $('.submit-button[data-teacher-id="' + teacherId + '"]').css('display', 'none');
         $('.cancel-button[data-teacher-id="' + teacherId + '"]').css('display', 'none');
-        $('.create-meeting-button[data-teacher-id="' + teacherId + '"]').hide();
-        $('.create-session-button[data-teacher-id="' + teacherId + '"]').show();
+        $('.create-meeting-button[data-teacher-id="' + teacherId + '"]').show();
+        // $('.create-session-button[data-teacher-id="' + teacherId + '"]').show();
         $("#expertise-" + teacherId + ":checked").prop("checked", false)
         // $('#expertise-' + teacherId).hide();
     });
