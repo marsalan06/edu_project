@@ -16,6 +16,8 @@ from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from class_sessions.models import TeachingSession
+
 from .models import ZoomMeeting
 from .serializers import ZoomMeetingSerializer
 
@@ -157,7 +159,7 @@ class ZoomMeetingAPIView(APIView):
         payload = {
             'topic': request.data.get('topic'),
             'start_time': request.data.get('start_time'),
-            'duration': request.data.get('duration')
+            'duration': 25  # 25 minutes
         }
         headers = {
             'Authorization': f'Bearer {access_token}',
@@ -165,13 +167,26 @@ class ZoomMeetingAPIView(APIView):
         }
 
         response = requests.post(meeting_url, json=payload, headers=headers)
+        print("=--------response-------", response.content.decode('utf-8'))
 
         if response.status_code == 201:
+            print("-----inside if case=-----")
             meeting_data = response.json()
+            teaching_session = TeachingSession.objects.get(
+                id=request.data.get('teaching_session'))
+            zoom_meeting = ZoomMeeting.objects.create(
+                teaching_session=teaching_session,
+                status=meeting_data.get('status'),
+                meeting_id=meeting_data.get('id'),
+                duration=meeting_data.get('duration'),
+                join_url=meeting_data.get('join_url')
+            )
+            zoom_meeting.save()
+            print("------sessiion saved----")
             return JsonResponse(meeting_data, status=201)
         else:
             # Handle the case where token refresh fails
-            return None
+            return JsonResponse({'error': 'Failed to create meeting'}, status=response.status_code)
 
 
 class ClearSessionView(View):

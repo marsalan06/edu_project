@@ -83,7 +83,7 @@
                         <h5>Expertise: </h5>
                         {% for expertise in teacher.expertise %}
                         <!--this is the input radio button-->
-                        <!-- <input type="radio" id="expertise-{{ teacher.id }}" name="expertise" value="{{ expertise }}"> -->
+                        <input type="radio" id="expertise-{{ teacher.id }}" name="expertise" value="{{ expertise }}">
                         <label class="custom-label" for="expertise-{{ teacher.id }}">{{ expertise }}</label>
                         <!-- <p>Experience: X years</p> -->
                         {% endfor %}
@@ -92,6 +92,8 @@
                         <input type="text" placeholder="Enter Description" id="description-{{ teacher.id }}" style="display: none;">
                         <input type="text" placeholder="Enter Topic" id="topic-{{ teacher.id }}" style="display: none;">
                         <br>
+                        <div class="error-message" data-teacher-id="{{ teacher.id }}" style="color: red;"></div>
+
                         <button onclick="redirectToZoomOAuth()", class="btn btn-outline-success create-session-button" data-teacher-id="{{ teacher.id }}">Create Session</button>
                         <button class="btn btn-outline-success create-meeting-button" data-teacher-id="{{ teacher.id }}" style="display: none;"> Create Meeting Request</button>
                         <button class="btn btn-primary submit-button" data-teacher-id="{{ teacher.id }}" style="display: none; margin-left: 10px;">Submit</button>
@@ -99,7 +101,6 @@
                         <!-- <form action="{% url 'zoom_oauth_redirect' %}" method="get" target="_blank">
                             <button class="btn btn-primary create-meeting-button" data-teacher-id="{{ teacher.id }}" style="display: none; margin-left: 10px;">Create Meeting</button>
                         </form> -->
-                        <div id="error-message" style="color: red;"></div>
 
                     </div>
                 </div>
@@ -123,12 +124,13 @@
     </footer>
 
     <!-- Link to Bootstrap JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-bzjwzV5a2j3tppz9Zs5FmMXDrt5Tf5alS6/P4jg5f5u2rw5z3AH5z5W5S5u1Hz0p11" crossorigin="anonymous"></script>
     <script>var token_expired = {{ token_expired |yesno:"true,false" }} </script>
     <!-- Link to an external JavaScript file -->
     <script src="script.js"></script>
     <script src="{% static 'js/session.js' %}"></script>
-    // <script src="{% static 'js/meeting.js' %}"></script>
     <script>
       function checkForAccessToken() {
         var accessToken = sessionStorage.getItem('zoom_access_token');
@@ -150,7 +152,6 @@
     </script>
     
     
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
 </body>
 </html>
